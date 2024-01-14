@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "algorithm": "cpp",
+        "atomic": "cpp",
+        "*.tcc": "cpp",
+        "memory": "cpp",
+        "new": "cpp",
+        "numeric": "cpp",
+        "system_error": "cpp",
+        "iostream": "cpp"
+    }
+}
