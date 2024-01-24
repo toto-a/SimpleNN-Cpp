@@ -22,7 +22,8 @@ void Tensor::isMatmutable(const Tensor &a, const Tensor &b)
       printf("The size of tensor a %u must match the size of tensor b %u at non-singleton dimension 0",a.m_cols,b.m_rows );
       throw 0;
   }
-  else (a.m_channels!=b.m_channels){
+  else if (a.m_channels!=b.m_channels){
+
     printf("The size of tensor a %u must match the size of tensor b %u at non-singleton dimension 0",a.m_channels,b.m_channels);
     throw 0;
   }
@@ -35,6 +36,17 @@ void Tensor::inBound(const Tensor& a,unsigned int x, unsigned int y)
     throw 0;
   }
 }
+
+void Tensor::sameSize(const Tensor &a, const Tensor &b)
+{
+  if(a.size!=b.size){
+    printf("Tensor must be of the same size ! Found %u and %u ", a.size, b.size);
+    throw 0;
+  }
+
+}
+
+
 
 Tensor Tensor::copy(){
   Tensor copy=Tensor(m_rows,m_cols,m_channels,m_data);
@@ -68,4 +80,23 @@ float &Tensor::operator()(unsigned int x, unsigned int y, unsigned int z) const
     return m_data[(x*m_cols+y)*z];
 }
 
+Tensor Tensor::operator+(const Tensor &other)
+{
+    sameSize(*this,other);
+    Tensor result=this->copy();
+    for (unsigned int i=0; i<size;i++){
+      result.m_data[i]+=m_data[i];
+    }
 
+    return result;
+}
+
+Tensor Tensor::operator+(const float c)
+{
+    Tensor result=this->copy();
+    for (unsigned int i=0; i<size;i++){
+      result.m_data[i]+=c;
+    }
+
+    return result;
+}

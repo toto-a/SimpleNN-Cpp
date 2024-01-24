@@ -36,5 +36,6 @@ GL/
 deps/
 image/
 *.ipynb
+.vscode/
 
 
