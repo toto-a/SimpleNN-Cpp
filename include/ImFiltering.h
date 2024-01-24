@@ -119,11 +119,9 @@ Image convolution_valid(Image& img, Matrix& kernel){
 
 
 Image Conv2d(Image& input,Matrix kernel,  bool padding=true){
-
-        printf("Copy Succeed");
         Image result;
         
-        switch (padding)
+        switch (padding==true)
         {
         case (1): 
         {
@@ -153,7 +151,6 @@ Image Conv2d(Image& input,Matrix kernel,  bool padding=true){
 
         }
 
-        imshow("Before Error",result);
 
         return result;
 }

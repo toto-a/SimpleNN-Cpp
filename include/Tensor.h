@@ -6,14 +6,52 @@
 #include "../include/Image.h"
 
 
-struct pointTensor{
-    float x;
-    float y;
-    float z;
+class Tensor  
+{
+  public:
+    Tensor(unsigned int rows, unsigned int cols, unsigned int channels,float *data=nullptr );
+    Tensor copy();
+     
+    static Tensor matmul(const Tensor&A, const Tensor&B);
+
+    static Tensor Image2Tensor(const Image& img);
+    static Tensor zeros(unsigned int rows, unsigned int cols, unsigned int channels);
+    static Tensor ones(unsigned int rows, unsigned int cols, unsigned int channels);
+    static Tensor range(unsigned int rows, unsigned int cols, unsigned int channels);
+    static Tensor rand(unsigned int rows, unsigned int cols, unsigned int channels);
+    static Tensor randn(unsigned int rows, unsigned int cols, unsigned int channels);
+
+    static Tensor zeros_like(const Tensor &other);
+    static Tensor ones_like(const Tensor &other);
+    static Tensor range_like(const Tensor &other);
+    static Tensor rand_like(const Tensor &other);
+    static Tensor randn_like(const Tensor &other);
+
+    // Operators
+    Tensor operator+(const Tensor &other);
+    Tensor operator+(const float c);
+    Tensor operator-(const Tensor &other);
+    Tensor operator-(const float c);
+    Tensor operator*(const Tensor &other);
+    Tensor operator*(const float c);
+
+    float& operator[](unsigned int index);
+    float& operator()(unsigned int x, unsigned int y,unsigned int z) const;
+
+    
+    private:
+
+      static void isMatmutable(const Tensor& a, const Tensor& b );
+      static void inBound(const Tensor& a, unsigned int x, unsigned int y);
+ 
+
+      float* m_data;
+      unsigned int m_rows;
+      unsigned int m_cols;
+      unsigned int m_channels;
+
 
 };
-
-
 
 
 

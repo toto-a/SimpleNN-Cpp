@@ -26,7 +26,6 @@
 typedef uint8_t u8;
 typedef std::vector<double> Array;
 typedef std::vector<Array> Matrix;
-typedef std::vector<Matrix> fImage;
 
 
 
