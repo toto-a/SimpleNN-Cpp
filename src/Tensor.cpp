@@ -74,6 +74,18 @@ Tensor Tensor::matmul(const Tensor &A, const Tensor &B)
     return out;
 }
 
+
+
+float &Tensor::operator[](unsigned int index)
+{
+
+  if (index>size){
+    printf("Index out of bound : size %s and index %u",size,index);
+    throw 0;
+  }
+  return m_data[index];
+}
+
 float &Tensor::operator()(unsigned int x, unsigned int y, unsigned int z) const
 {
     inBound(*this,x,y);
@@ -96,6 +108,50 @@ Tensor Tensor::operator+(const float c)
     Tensor result=this->copy();
     for (unsigned int i=0; i<size;i++){
       result.m_data[i]+=c;
+    }
+
+    return result;
+}
+
+Tensor Tensor::operator-(const Tensor &other)
+{
+    sameSize(*this,other);
+    Tensor result=this->copy();
+    for (unsigned int i=0; i<size;i++){
+      result.m_data[i]-=m_data[i];
+    }
+
+    return result;
+ 
+}
+
+Tensor Tensor::operator-(const float c)
+{
+    Tensor result=this->copy();
+    for (unsigned int i=0; i<size;i++){
+      result.m_data[i]-=c;
+    }
+
+    return result;
+}
+
+Tensor Tensor::operator*(const Tensor &other)
+{
+    sameSize(*this,other);
+    Tensor result=this->copy();
+    for (unsigned int i=0; i<size;i++){
+      result.m_data[i]*=m_data[i];
+    }
+
+    return result;
+ 
+}
+
+Tensor Tensor::operator*(const float c)
+{ 
+    Tensor result=this->copy();
+    for (unsigned int i=0; i<size;i++){
+      result.m_data[i]-=c;
     }
 
     return result;
