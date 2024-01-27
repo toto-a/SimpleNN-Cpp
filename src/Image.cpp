@@ -122,7 +122,7 @@ Image& Image::grayscale_avg() {
 		printf("Image %p has less than 3 channels, it is assumed to already be grayscale.", this);
 	}
 	else {
-		for(int i = 0; i < size; i+=channels) {
+		for(unsigned int i = 0; i < size; i+=channels) {
 			//(r+g+b)/3
 			int gray = (data[i] + data[i+1] + data[i+2])/3;
 			memset(data+i, gray, 3);
@@ -137,7 +137,7 @@ Image& Image::grayscale_lum() {
 		printf("Image %p has less than 3 channels, it is assumed to already be grayscale.", this);
 	}
 	else {
-		for(int i = 0; i < size; i+=channels) {
+		for(long unsigned int i = 0; i < size; i+=channels) {
 			int gray = 0.2126*data[i] + 0.7152*data[i+1] + 0.0722*data[i+2];
 			memset(data+i, gray, 3);
 		}
@@ -153,9 +153,9 @@ Image& Image::grayscale_lum() {
 
 Image& Image::flipY() {
 
-    uint8_t tmp[4];
-	uint8_t* px1;
-	uint8_t* px2;
+  uint8_t tmp[4];
+  uint8_t* px1;
+  uint8_t* px2;
 	for(int x = 0;x < w;++x) {
 		for(int y = 0;y < h/2;++y) {
 			px1 = &data[(x + y * w) * channels];
@@ -199,7 +199,7 @@ Image& Image::crop(uint16_t cx, uint16_t cy, uint16_t cw, uint16_t ch) {
 
 Image & Image::malloc(Image & img){
 	
-    delete[] data;
+  delete[] data;
 	h=img.h;
 	w=img.w;
 	channels=img.channels;
@@ -212,9 +212,11 @@ Image & Image::malloc(Image & img){
 
 
 }
+
 Image zeros_like(const Image &img)
 {
 	Image out(img);
 	memset(out.data,0,out.size);
-    return out;
+  return out;
+
 }

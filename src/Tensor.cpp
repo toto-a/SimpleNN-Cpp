@@ -1,11 +1,13 @@
 #include "../include/Tensor.h"
+#include "../include/Image.h"
+#include <cstring>
+#include <random>
 #include "Tensor.h"
 
 
 
 
-
-Tensor::Tensor(unsigned int rows, unsigned int cols, unsigned int channels,float *data=nullptr){
+Tensor::Tensor(unsigned int rows, unsigned int cols, unsigned int channels,float *data ){
 
   size_t size=rows*cols*channels;
   float* new_data=new float[size];
@@ -31,8 +33,8 @@ void Tensor::isMatmutable(const Tensor &a, const Tensor &b)
 
 void Tensor::inBound(const Tensor& a,unsigned int x, unsigned int y)
 {
-  if(x>= a.m_rows | y >= a.m_cols){
-    printf("Out of bounds % ");
+  if((x>= a.m_rows) | (y >= a.m_cols)){
+    printf("Out of bounds  ");
     throw 0;
   }
 }
@@ -40,13 +42,24 @@ void Tensor::inBound(const Tensor& a,unsigned int x, unsigned int y)
 void Tensor::sameSize(const Tensor &a, const Tensor &b)
 {
   if(a.size!=b.size){
-    printf("Tensor must be of the same size ! Found %u and %u ", a.size, b.size);
+    printf("Tensor must be of the same size ! Found %lu and %lu ", a.size, b.size);
     throw 0;
   }
 
 }
 
+Tensor Tensor::transpose(){
 
+  Tensor tp(m_cols,m_rows,m_channels);
+  for(unsigned int i=0; i<size;i++){
+      int j=(i%m_cols);
+      int l=(i%m_rows);
+      tp[i]=m_data[(j*m_rows)+l];
+    
+  } 
+  
+  return tp;
+}
 
 Tensor Tensor::copy(){
   Tensor copy=Tensor(m_rows,m_cols,m_channels,m_data);
@@ -80,7 +93,7 @@ float &Tensor::operator[](unsigned int index)
 {
 
   if (index>size){
-    printf("Index out of bound : size %s and index %u",size,index);
+    printf("Index out of bound : size %ld and index %u",size,index);
     throw 0;
   }
   return m_data[index];
@@ -155,4 +168,48 @@ Tensor Tensor::operator*(const float c)
     }
 
     return result;
+}
+
+
+Tensor Tensor::zeros(unsigned int rows, unsigned int cols, unsigned int channels){
+  Tensor zen(rows, cols,channels);
+  size_t size=rows*cols*channels;
+  for(unsigned int i=0;i<size;i++){
+    zen[i]=0;
+  }
+  return zen;
+}
+
+Tensor Tensor::ones(unsigned int rows, unsigned int cols, unsigned int channels){
+  Tensor one(rows, cols,channels);
+  size_t size=rows*cols*channels;
+  for(unsigned int i=0;i<size;i++){
+    one[i]=1;
+  }
+  return one;
+}
+
+
+Tensor Tensor::range(unsigned int rows, unsigned int cols, unsigned int channels){
+
+  Tensor ran(rows, cols,channels);
+  size_t size=rows*cols*channels;
+  for(unsigned int i=0;i<size;i++){
+    ran[i]=i;
+  }
+  return ran;
+}
+
+
+Tensor Tensor::randn(unsigned int rows, unsigned int cols, unsigned int channels){
+    Tensor n(rows,cols,channels);
+    std::random_device rd; 
+    std::mt19937 gen(rd()); 
+    std::normal_distribution<float>d(0,1);
+    
+    for(unsigned int i=0; i<n.size; i++){
+        n[i]=d(gen);
+    }
+    
+  return n;
 }

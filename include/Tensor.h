@@ -11,14 +11,13 @@ class Tensor
   public:
     Tensor(unsigned int rows, unsigned int cols, unsigned int channels,float *data=nullptr );
     Tensor copy();
+    Tensor transpose();
      
     static Tensor matmul(const Tensor&A, const Tensor&B);
 
-    static Tensor Image2Tensor(const Image& img);
     static Tensor zeros(unsigned int rows, unsigned int cols, unsigned int channels);
     static Tensor ones(unsigned int rows, unsigned int cols, unsigned int channels);
     static Tensor range(unsigned int rows, unsigned int cols, unsigned int channels);
-    static Tensor rand(unsigned int rows, unsigned int cols, unsigned int channels);
     static Tensor randn(unsigned int rows, unsigned int cols, unsigned int channels);
 
 
@@ -51,5 +50,15 @@ class Tensor
 };
 
 
+inline Tensor Image2Tensor(const Image& img){
+    unsigned int row=img.h;
+    unsigned int cols=img.w;
+    unsigned int channels=img.channels;
+    float * data=reinterpret_cast<float*>(img.data);
+    Tensor ten(row,cols,channels,data);
+
+    return  ten;
+
+}
 
 #endif

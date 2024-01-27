@@ -15,7 +15,6 @@ Image padding(Image& img,int kw, int kh){
     int out_w=img.w + kw -1;
     int out_h=img.h + kh -1;
     int out_channels=img.channels;
-    size_t element=sizeof(uint8_t);
 
     Image out(out_w,out_h,out_channels);
 
