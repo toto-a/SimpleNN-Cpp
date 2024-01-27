@@ -117,19 +117,15 @@ Image convolution_valid(Image& img, Matrix& kernel){
 }
 
 
-Image Conv2d(Image& input,Matrix kernel,  bool padding=true){
+Image Conv2d(Image& input,Matrix kernel, int padding=1){
         Image result;
-        
-        switch (padding==true)
+        switch (padding)
         {
         case (1): 
         {
 
-            printf("Same\n");
             Image _int=cv::convolution_full(input, kernel);
             result.malloc(_int);
-
-            
 
             break;
         }

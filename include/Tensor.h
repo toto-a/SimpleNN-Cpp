@@ -4,6 +4,13 @@
 
 
 #include "../include/Image.h"
+#include <string>
+#include <cstring>
+#include <random>
+#include <sstream>
+#include <iomanip>
+#include <typeinfo>
+#include <typeinfo>
 
 
 class Tensor  
@@ -32,6 +39,8 @@ class Tensor
     float& operator[](unsigned int index);
     float& operator()(unsigned int x, unsigned int y,unsigned int z) const;
 
+    std::string printTensor();
+
     
     private:
 
@@ -44,21 +53,13 @@ class Tensor
       unsigned int m_rows;
       unsigned int m_cols;
       unsigned int m_channels;
-      size_t size=m_rows*m_cols*m_channels;
+      size_t m_size=0;
 
 
 };
 
 
-inline Tensor Image2Tensor(const Image& img){
-    unsigned int row=img.h;
-    unsigned int cols=img.w;
-    unsigned int channels=img.channels;
-    float * data=reinterpret_cast<float*>(img.data);
-    Tensor ten(row,cols,channels,data);
-
-    return  ten;
-
-}
+Tensor Image2Tensor(const Image& img);
+  
 
 #endif
