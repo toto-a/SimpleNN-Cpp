@@ -7,8 +7,7 @@
 int main(){
     
 
-    Image img("image/plaque1.png");
-    // img.write("src/a.png");
+    Image img("src/Lenna.png");
     Matrix kernel=Matrix{
         {-1.0f,0.0f,1.0f},
         {-2.0f,0.0f,2.0f},
@@ -21,7 +20,6 @@ int main(){
     Tensor ten=Image2Tensor(img);
     Tensor ten_t=ten.transpose();
     imshow("IMAGE",out);
-    printf("Finsihed !");
     return 0;
 }
 

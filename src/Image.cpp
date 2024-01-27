@@ -5,7 +5,6 @@
 #include "../include/stb_image.h"
 #include "../include/stb_image_write.h"
 #include "../include/Image.h"
-#include "Image.h"
 
 Image::Image(const char* filename) {
 	if(read(filename)) {
