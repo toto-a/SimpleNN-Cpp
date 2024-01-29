@@ -1,21 +1,18 @@
 #include "../include/Tensor.h"
-#include "Tensor.h"
-
+// 
 
 Tensor::Tensor(unsigned int rows, unsigned int cols, unsigned int channels,float *data ){
 
   m_size=rows*cols*channels;
-  float* new_data=new float[m_size];
+  m_channels=channels;
+  m_data=new float[m_size];
+    debug_message("Here");
   if (data){
-    std::memcpy(new_data, data, m_size*sizeof(float));
-    std::cout<<"Type of data :"<< typeid(data).name()<<std::endl;
-  }
-  else{
-    int val=0;
-    memset(new_data,val,m_size*sizeof(float));
+    memcpy(m_data, data, m_size*sizeof(float));
   }
   m_cols=cols;
   m_rows=rows;
+
 }
 
 void Tensor::isMatmutable(const Tensor &a, const Tensor &b)
@@ -52,13 +49,14 @@ void Tensor::sameSize(const Tensor &a, const Tensor &b)
 
 Tensor Tensor::transpose(){
 
-  Tensor tp(m_cols,m_rows,m_channels);
-  for(unsigned int i=0; i<m_size;i++){
-      int j=(i%m_cols);
-      int l=(i%m_rows);
-      tp[i]=m_data[(j*m_rows)+l];
-    
-  } 
+  Tensor tp=zeros(m_rows,m_cols,m_channels);
+  for(unsigned int b=0; b<m_channels; b++){
+    for (unsigned int i=0; i<m_rows; i++){
+        for (unsigned int j=0; j<m_cols ; j++){
+              tp(i,j,b)=m_data[(j*m_rows+i)*tp.m_channels+b];
+        }
+      }
+    }
   
   return tp;
 }
@@ -89,12 +87,24 @@ Tensor Tensor::matmul(const Tensor &A, const Tensor &B)
     return out;
 }
 
+unsigned int Tensor::cols() const
+{
+    return m_cols;
+}
 
+unsigned int Tensor::rows() const
+{
+    return m_rows;
+}
+
+float * Tensor::data() const {
+  return m_data;
+}
 
 float &Tensor::operator[](unsigned int index)
 {
 
-  if (index>m_size){
+  if (index>=m_size){
     printf("Index out of bound : size %ld and index %u",m_size,index);
     throw 0;
   }
@@ -107,15 +117,26 @@ float &Tensor::operator()(unsigned int x, unsigned int y, unsigned int z) const
     return m_data[(x*m_cols+y)*z];
 }
 
-std::string Tensor::printTensor()
+std::string Tensor::Tensor2string()
 {
     std::stringstream ss;
-    for(unsigned int i=0; i<m_size; i++){
-      ss<<std::setprecision(2)<< m_data[i]<< " ";
-
+    for(unsigned int c=0;c<m_channels;c++){
+      for( unsigned int i = 0; i < m_rows; i++){
+        for(unsigned int j = 0; j < m_cols; j++){
+            ss << std::setprecision(5) << m_data[(i*m_cols+j)*m_channels+c] << " ";
+        }
+        ss << std::endl;
+      }
     }
-    ss<<std::endl;
+    
     return ss.str();
+}
+
+void Tensor::printTensor()
+{
+  std::string ss=this->Tensor2string();
+  std::cout<<ss<<std::endl;
+
 }
 
 Tensor Tensor::operator+(const Tensor &other)
@@ -197,7 +218,7 @@ Tensor Tensor::ones(unsigned int rows, unsigned int cols, unsigned int channels)
   Tensor one(rows, cols,channels);
   size_t size=rows*cols*channels;
   for(unsigned int i=0;i<size;i++){
-    one[i]=1;
+      one[i]=1;
   }
   return one;
 }
@@ -227,15 +248,44 @@ Tensor Tensor::randn(unsigned int rows, unsigned int cols, unsigned int channels
   return n;
 }
 
+
+
+Tensor Tensor::zeros_like(const Tensor &other)
+{
+    return zeros(other.m_rows,other.m_cols,other.m_channels);
+}
+
+Tensor Tensor::ones_like(const Tensor &other)
+{
+    return ones(other.m_rows,other.m_cols,other.m_channels);
+}
+
+
+
 Tensor Image2Tensor(const Image &img)
 { 
+    Image in(img);
     unsigned int row=img.h;
     unsigned int cols=img.w;
     unsigned int channels=img.channels;
-    float* data = static_cast<float*>(static_cast<void*>(img.data));
-    Tensor ten(row,cols,channels,data);
+
+    float * fdata=new float[in.size];
+    for(unsigned int b=0; b<channels; b++){
+    for (unsigned int i=0; i<row; i++){
+        for (unsigned int j=0; j<cols ; j++){
+              fdata[(i*cols+j)*channels+b]=(float)1.0*in.data[(i*cols+j)*channels+b];
+        }
+      }
+    }
+    Tensor ten(row,cols,channels,fdata);
+    delete[] fdata;
 
     return  ten;
+}
 
 
+
+void debug_message(const char *s)
+{
+  std::cout<<s<<std::endl;
 }

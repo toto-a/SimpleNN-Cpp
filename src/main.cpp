@@ -17,8 +17,12 @@ int main(){
 
        
     Image out=cv::Conv2d(img,kernel);
-    Tensor ten=Image2Tensor(img);
+    Tensor ten=Tensor::zeros(2,2,3);
+    Tensor sq=Tensor::matmul(ten,ten);
+    Tensor teni=Image2Tensor(out);
+
     Tensor ten_t=ten.transpose();
+    teni.printTensor();
     imshow("IMAGE",out);
     return 0;
 }
