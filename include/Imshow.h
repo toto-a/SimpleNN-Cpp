@@ -71,7 +71,6 @@ int imshow(const char *title,Image& img) {
     SDL_DestroyWindow(window);
     SDL_Quit();
 
-    printf("Display finished !\n");
 
     return 0;
 }

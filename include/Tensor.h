@@ -6,6 +6,7 @@
 #include "../include/Image.h"
 #include <string>
 #include <cstring>
+#include <string>
 #include <random>
 #include <sstream>
 #include <iomanip>
@@ -21,11 +22,17 @@ class Tensor
     Tensor transpose();
      
     static Tensor matmul(const Tensor&A, const Tensor&B);
+    unsigned int cols() const;
+    unsigned int rows() const;
+    float* data() const;
 
     static Tensor zeros(unsigned int rows, unsigned int cols, unsigned int channels);
     static Tensor ones(unsigned int rows, unsigned int cols, unsigned int channels);
     static Tensor range(unsigned int rows, unsigned int cols, unsigned int channels);
     static Tensor randn(unsigned int rows, unsigned int cols, unsigned int channels);
+
+    static Tensor zeros_like(const Tensor &other);
+    static Tensor ones_like(const Tensor &other);
 
 
     // Operators
@@ -39,7 +46,8 @@ class Tensor
     float& operator[](unsigned int index);
     float& operator()(unsigned int x, unsigned int y,unsigned int z) const;
 
-    std::string printTensor();
+    std::string Tensor2string();
+    void printTensor();
 
     
     private:
@@ -60,6 +68,7 @@ class Tensor
 
 
 Tensor Image2Tensor(const Image& img);
+void debug_message(const char * s);
   
 
 #endif
